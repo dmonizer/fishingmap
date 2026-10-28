@@ -10,6 +10,7 @@ import {
   Tooltip,
   useMap,
   useMapEvents,
+  WMSTileLayer,
 } from "react-leaflet";
 import type { LatLng } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -35,6 +36,9 @@ const OSM_ATTRIBUTION =
 const SEAMARK_URL = "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png";
 const SEAMARK_ATTRIBUTION =
   '&copy; <a href="https://www.openseamap.org">OpenSeaMap</a> contributors';
+const RADAR_WMS_URL = "https://ilmgs.envir.ee/geoserver/ilm/wms";
+const RADAR_ATTRIBUTION =
+  '&copy; <a href="https://www.ilmateenistus.ee">Estonian Environment Agency</a>';
 
 type View = { lat: number; lng: number; zoom: number };
 
@@ -135,6 +139,17 @@ export default function MapView() {
           </LayersControl.BaseLayer>
           <LayersControl.Overlay checked name="Seamarks (OpenSeaMap)">
             <TileLayer url={SEAMARK_URL} attribution={SEAMARK_ATTRIBUTION} />
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Weather radar (Estonia)">
+            <WMSTileLayer
+              url={RADAR_WMS_URL}
+              layers="ilm:cmp_cap"
+              format="image/png"
+              transparent
+              version="1.1.0"
+              opacity={0.65}
+              attribution={RADAR_ATTRIBUTION}
+            />
           </LayersControl.Overlay>
         </LayersControl>
 
