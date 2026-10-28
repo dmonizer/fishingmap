@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   LayersControl,
   MapContainer,
@@ -17,10 +17,13 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import MarkerForm, { type MarkerDraft } from "./MarkerForm";
+import LocationPermissionModal from "./LocationPermissionModal";
 import { OrthoPhotoLayer } from "./OrthoPhotoLayer";
+import UserLocationLayer from "./UserLocationLayer";
 import WeatherStationsLayer from "./WeatherStationsLayer";
 import { getMarkerIcon } from "@/lib/icons";
 import { loadMarkers, saveMarkers } from "@/lib/storage";
+import { useGeolocation } from "@/lib/useGeolocation";
 import {
   LABEL_ZOOM_THRESHOLD,
   type FishingMarker,
@@ -31,6 +34,7 @@ import {
 const DEFAULT_CENTER: [number, number] = [20, 0];
 const DEFAULT_ZOOM = 2;
 const LOCATED_ZOOM = 10;
+const GPS_LOCATED_ZOOM = 12;
 
 const OSM_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const OSM_ATTRIBUTION =
@@ -85,6 +89,10 @@ export default function MapView() {
   const [draft, setDraft] = useState<MarkerDraft | null>(null);
   const [view, setView] = useState<View | null>(null);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+  const [showLocationModal, setShowLocationModal] = useState(true);
+  const [following, setFollowing] = useState(false);
+  const geo = useGeolocation();
+  const locatedByGps = useRef(false);
 
   useEffect(() => {
     setMarkers(loadMarkers());
@@ -95,6 +103,7 @@ export default function MapView() {
     if (hydrated) saveMarkers(markers);
   }, [markers, hydrated]);
 
+  // IP-based fallback so the map is still centered even if GPS is denied.
   useEffect(() => {
     let cancelled = false;
     fetch("/api/location")
@@ -111,6 +120,23 @@ export default function MapView() {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  // First precise GPS fix wins over the IP fallback and flies the map there.
+  useEffect(() => {
+    if (geo.status === "granted" && geo.position && !locatedByGps.current) {
+      locatedByGps.current = true;
+      setView({ lat: geo.position.lat, lng: geo.position.lng, zoom: GPS_LOCATED_ZOOM });
+    }
+  }, [geo.status, geo.position]);
+
+  const handleAllowLocation = useCallback(() => {
+    setShowLocationModal(false);
+    geo.start();
+  }, [geo]);
+
+  const handleDenyLocation = useCallback(() => {
+    setShowLocationModal(false);
   }, []);
 
   const handleMapClick = useCallback((latlng: LatLng) => {
@@ -132,6 +158,8 @@ export default function MapView() {
   const handleDelete = useCallback((id: string) => {
     setMarkers((previous) => previous.filter((marker) => marker.id !== id));
   }, []);
+
+  const hasLocation = geo.status === "granted" && geo.position !== null;
 
   return (
     <div className="map-view">
@@ -180,6 +208,7 @@ export default function MapView() {
 
         <MapBehavior onZoom={setZoom} onClick={handleMapClick} />
         <FlyTo view={view} />
+        <UserLocationLayer position={geo.position} following={following} />
 
         {markers.map((marker) => (
           <Marker key={marker.id} position={[marker.lat, marker.lng]} icon={getMarkerIcon(marker.icon)}>
@@ -205,11 +234,29 @@ export default function MapView() {
         ))}
       </MapContainer>
 
+      {hasLocation && (
+        <button
+          type="button"
+          className={`follow-button${following ? " follow-button--active" : ""}`}
+          aria-pressed={following}
+          onClick={() => setFollowing((value) => !value)}
+        >
+          {following ? "Following" : "Follow my location"}
+        </button>
+      )}
+
       {draft && (
         <MarkerForm
           draft={draft}
           onSave={handleSave}
           onCancel={() => setDraft(null)}
+        />
+      )}
+
+      {showLocationModal && (
+        <LocationPermissionModal
+          onAllow={handleAllowLocation}
+          onDeny={handleDenyLocation}
         />
       )}
     </div>

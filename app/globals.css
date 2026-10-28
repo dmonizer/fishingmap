@@ -272,3 +272,64 @@ body {
 .wind-station__temp {
   color: #0b7fab;
 }
+
+/* Location permission modal */
+.location-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 30, 40, 0.4);
+}
+
+.location-modal__card {
+  width: min(340px, calc(100vw - 32px));
+  padding: 20px;
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  background: var(--panel-bg);
+  box-shadow: 0 12px 40px rgba(15, 30, 45, 0.35);
+}
+
+.location-modal__title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.location-modal__text {
+  margin: 0 0 16px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.location-modal__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Follow-my-location button */
+.follow-button {
+  position: absolute;
+  right: 12px;
+  bottom: 24px;
+  z-index: 1200;
+  padding: 8px 14px;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 30, 45, 0.25);
+}
+
+.follow-button--active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
