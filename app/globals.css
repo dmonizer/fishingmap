@@ -1,0 +1,193 @@
+:root {
+  color-scheme: light;
+  --panel-bg: #ffffff;
+  --panel-border: #d8dee4;
+  --text: #1c2530;
+  --muted: #5c6b7a;
+  --primary: #0b6ea8;
+  --danger: #c0392b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+}
+
+.map-shell,
+.map-view {
+  position: fixed;
+  inset: 0;
+}
+
+.map-view {
+  isolation: isolate;
+}
+
+.map-canvas {
+  height: 100%;
+  width: 100%;
+  background: #a9cde0;
+}
+
+.map-loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Marker pins (L.divIcon) */
+.fishing-pin {
+  background: none;
+  border: none;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
+
+.fishing-pin__body {
+  display: block;
+}
+
+.fishing-pin__glyph {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 24px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 16px;
+  pointer-events: none;
+}
+
+.marker-label {
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.marker-label::before {
+  display: none;
+}
+
+.marker-popup {
+  min-width: 160px;
+  font-size: 0.85rem;
+}
+
+.marker-popup p {
+  margin: 6px 0 10px;
+  color: var(--muted);
+  white-space: pre-wrap;
+}
+
+/* Add-marker panel */
+.marker-form {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 264px;
+  padding: 14px;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  background: var(--panel-bg);
+  box-shadow: 0 6px 20px rgba(15, 30, 45, 0.22);
+}
+
+.marker-form__title {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.marker-form__coords {
+  margin: 0;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.marker-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.marker-form__field input,
+.marker-form__field textarea,
+.marker-form__field select {
+  padding: 6px 8px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 400;
+  color: inherit;
+  background: #fff;
+}
+
+.marker-form__field textarea {
+  resize: vertical;
+}
+
+.marker-form__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  padding: 6px 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  background: #f4f6f8;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #e9edf1;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.button--primary {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background: #095a89;
+}
+
+.button--danger {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: #fff;
+}
+
+.button--danger:hover {
+  background: #fdecea;
+}
