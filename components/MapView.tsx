@@ -12,7 +12,7 @@ import {
   useMapEvents,
   WMSTileLayer,
 } from "react-leaflet";
-import type { LatLng } from "leaflet";
+import type { LatLng, Marker as LeafletMarker } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
@@ -92,6 +92,8 @@ export default function MapView() {
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [showLocationModal, setShowLocationModal] = useState(true);
   const [following, setFollowing] = useState(false);
+  const [showMarkerList, setShowMarkerList] = useState(false);
+  const markerRefs = useRef<Record<string, LeafletMarker>>({});
   const geo = useGeolocation();
   const locatedByGps = useRef(false);
 
@@ -160,6 +162,24 @@ export default function MapView() {
     setMarkers((previous) => previous.filter((marker) => marker.id !== id));
   }, []);
 
+  const handleFocusMarker = useCallback(
+    (id: string) => {
+      const marker = markers.find((item) => item.id === id);
+      if (!marker) return;
+      setFollowing(false);
+      setShowMarkerList(false);
+      setView({
+        lat: marker.lat,
+        lng: marker.lng,
+        zoom: Math.max(zoom, LABEL_ZOOM_THRESHOLD),
+      });
+      window.setTimeout(() => {
+        markerRefs.current[id]?.openPopup();
+      }, 600);
+    },
+    [markers, zoom],
+  );
+
   const hasLocation = geo.status === "granted" && geo.position !== null;
 
   return (
@@ -212,7 +232,15 @@ export default function MapView() {
         <UserLocationLayer position={geo.position} following={following} />
 
         {markers.map((marker) => (
-          <Marker key={marker.id} position={[marker.lat, marker.lng]} icon={getMarkerIcon(marker.icon)}>
+          <Marker
+            key={marker.id}
+            position={[marker.lat, marker.lng]}
+            icon={getMarkerIcon(marker.icon)}
+            ref={(instance) => {
+              if (instance) markerRefs.current[marker.id] = instance;
+              else delete markerRefs.current[marker.id];
+            }}
+          >
             {zoom >= LABEL_ZOOM_THRESHOLD && (
               <Tooltip permanent direction="top" offset={[0, -30]} className="marker-label">
                 {marker.name}
@@ -245,15 +273,64 @@ export default function MapView() {
         ))}
       </MapContainer>
 
-      {hasLocation && (
-        <button
-          type="button"
-          className={`follow-button${following ? " follow-button--active" : ""}`}
-          aria-pressed={following}
-          onClick={() => setFollowing((value) => !value)}
-        >
-          {following ? "Following" : "Follow my location"}
-        </button>
+      {(hasLocation || markers.length > 0) && (
+        <div className="map-actions">
+          {hasLocation && (
+            <button
+              type="button"
+              className={`follow-button${following ? " follow-button--active" : ""}`}
+              aria-pressed={following}
+              onClick={() => setFollowing((value) => !value)}
+            >
+              {following ? "Following" : "Follow my location"}
+            </button>
+          )}
+          {markers.length > 0 && (
+            <button
+              type="button"
+              className="list-button"
+              onClick={() => setShowMarkerList((value) => !value)}
+            >
+              My points ({markers.length})
+            </button>
+          )}
+        </div>
+      )}
+
+      {showMarkerList && markers.length > 0 && (
+        <div className="marker-list">
+          <div className="marker-list__header">
+            <span className="marker-list__title">My points</span>
+            <button
+              type="button"
+              className="marker-list__close"
+              aria-label="Close"
+              onClick={() => setShowMarkerList(false)}
+            >
+              ✕
+            </button>
+          </div>
+          <ul className="marker-list__items">
+            {[...markers]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((marker) => (
+                <li key={marker.id}>
+                  <button
+                    type="button"
+                    className="marker-list__item"
+                    onClick={() => handleFocusMarker(marker.id)}
+                  >
+                    <span className="marker-list__name">
+                      {marker.name.trim() ? marker.name : "(unnamed)"}
+                    </span>
+                    <span className="marker-list__coords">
+                      {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
+                    </span>
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </div>
       )}
 
       {draft && (

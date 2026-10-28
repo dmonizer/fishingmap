@@ -324,12 +324,19 @@ body {
   justify-content: flex-end;
 }
 
-/* Follow-my-location button */
-.follow-button {
+/* Bottom-right map action buttons */
+.map-actions {
   position: absolute;
   right: 12px;
   bottom: 24px;
   z-index: 1200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.follow-button,
+.list-button {
   padding: 8px 14px;
   border: 1px solid var(--panel-border);
   border-radius: 999px;
@@ -346,6 +353,82 @@ body {
   border-color: var(--primary);
   background: var(--primary);
   color: #fff;
+}
+
+/* User points list panel */
+.marker-list {
+  position: absolute;
+  right: 12px;
+  bottom: 96px;
+  z-index: 1200;
+  width: 250px;
+  max-height: 340px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  background: var(--panel-bg);
+  box-shadow: 0 8px 24px rgba(15, 30, 45, 0.3);
+  overflow: hidden;
+}
+
+.marker-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.marker-list__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.marker-list__close {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 2px 4px;
+}
+
+.marker-list__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.marker-list__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.marker-list__item:hover {
+  background: #f0f4f8;
+}
+
+.marker-list__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.marker-list__coords {
+  font-size: 0.68rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Waze deep-link in marker popup */
