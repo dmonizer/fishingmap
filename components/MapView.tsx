@@ -17,6 +17,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import MarkerForm, { type MarkerDraft } from "./MarkerForm";
+import { OrthoPhotoLayer } from "./OrthoPhotoLayer";
 import { getMarkerIcon } from "@/lib/icons";
 import { loadMarkers, saveMarkers } from "@/lib/storage";
 import {
@@ -39,6 +40,9 @@ const SEAMARK_ATTRIBUTION =
 const RADAR_WMS_URL = "https://ilmgs.envir.ee/geoserver/ilm/wms";
 const RADAR_ATTRIBUTION =
   '&copy; <a href="https://www.ilmateenistus.ee">Estonian Environment Agency</a>';
+
+const ORTHO_ATTRIBUTION =
+  '&copy; <a href="https://maaruum.ee">Maa- ja Ruumiamet</a>';
 const ENC_WMS_URL = "https://gis.transpordiamet.ee/primar/wms_ip/TranspordiametNutimeri";
 const ENC_ATTRIBUTION =
   '&copy; <a href="https://transpordiamet.ee">Estonian Transport Administration</a> / <a href="https://services.ecc.no">PRIMAR</a>';
@@ -139,6 +143,9 @@ export default function MapView() {
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="OpenStreetMap">
             <TileLayer url={OSM_URL} attribution={OSM_ATTRIBUTION} subdomains="abc" />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Orthophoto (Maa-amet)">
+            <OrthoPhotoLayer attribution={ORTHO_ATTRIBUTION} />
           </LayersControl.BaseLayer>
           <LayersControl.Overlay checked name="Seamarks (OpenSeaMap)">
             <TileLayer url={SEAMARK_URL} attribution={SEAMARK_ATTRIBUTION} />
