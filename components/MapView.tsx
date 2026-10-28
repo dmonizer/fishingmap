@@ -173,12 +173,13 @@ export default function MapView() {
               attribution={ENC_ATTRIBUTION}
             />
           </LayersControl.Overlay>
+          <LayersControl.Overlay checked name="Weather stations (coast)">
+            <WeatherStationsLayer />
+          </LayersControl.Overlay>
         </LayersControl>
 
         <MapBehavior onZoom={setZoom} onClick={handleMapClick} />
         <FlyTo view={view} />
-
-        <WeatherStationsLayer />
 
         {markers.map((marker) => (
           <Marker key={marker.id} position={[marker.lat, marker.lng]} icon={getMarkerIcon(marker.icon)}>

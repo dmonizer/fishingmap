@@ -229,3 +229,46 @@ body {
   color: var(--muted);
   font-size: 0.72rem;
 }
+
+/* Weather-station wind markers */
+.wind-station-marker {
+  background: none;
+  border: none;
+}
+
+.wind-station {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: 3px 2px;
+  border: 1px solid rgba(21, 101, 192, 0.5);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  font-size: 0.66rem;
+  line-height: 1.05;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.wind-station__arrow {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+
+.wind-station__arrow svg {
+  display: block;
+}
+
+.wind-station__speed {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.wind-station__temp {
+  color: #0b7fab;
+}
