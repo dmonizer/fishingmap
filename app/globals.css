@@ -347,3 +347,19 @@ body {
   background: var(--primary);
   color: #fff;
 }
+
+/* Waze deep-link in marker popup */
+.waze-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: #33ccff;
+  border-color: #33ccff;
+  background: #0d2a3a;
+}
+
+.waze-link:hover {
+  background: #123a4f;
+}

@@ -24,6 +24,7 @@ import WeatherStationsLayer from "./WeatherStationsLayer";
 import { getMarkerIcon } from "@/lib/icons";
 import { loadMarkers, saveMarkers } from "@/lib/storage";
 import { useGeolocation } from "@/lib/useGeolocation";
+import { isAndroid, wazeNavigateUrl } from "@/lib/waze";
 import {
   LABEL_ZOOM_THRESHOLD,
   type FishingMarker,
@@ -221,6 +222,16 @@ export default function MapView() {
               <div className="marker-popup">
                 <strong>{marker.name}</strong>
                 {marker.description && <p>{marker.description}</p>}
+                {isAndroid() && (
+                  <a
+                    className="button waze-link"
+                    href={wazeNavigateUrl(marker.lat, marker.lng)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Waze here
+                  </a>
+                )}
                 <button
                   type="button"
                   className="button button--danger"
