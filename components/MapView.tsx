@@ -59,12 +59,12 @@ function MapBehavior({
   onClick,
 }: {
   onZoom: (zoom: number) => void;
-  onClick: (latlng: LatLng) => void;
+  onClick: (latlng: LatLng, point: { x: number; y: number }) => void;
 }) {
   const map = useMap();
   useMapEvents({
     zoomend: () => onZoom(map.getZoom()),
-    click: (event) => onClick(event.latlng),
+    click: (event) => onClick(event.latlng, event.containerPoint),
   });
   return null;
 }
@@ -139,8 +139,8 @@ export default function MapView() {
     setShowLocationModal(false);
   }, []);
 
-  const handleMapClick = useCallback((latlng: LatLng) => {
-    setDraft({ lat: latlng.lat, lng: latlng.lng });
+  const handleMapClick = useCallback((latlng: LatLng, point: { x: number; y: number }) => {
+    setDraft({ lat: latlng.lat, lng: latlng.lng, x: point.x, y: point.y });
   }, []);
 
   const handleSave = useCallback(
