@@ -61,7 +61,7 @@ export default function MarkerForm({ draft, onSave, onCancel }: Props) {
       </label>
 
       <div className="marker-form__actions">
-        <button type="submit" className="button button--primary" disabled={name.length === 0}>
+        <button type="submit" className="button button--primary" disabled={name.trim().length === 0}>
           Save
         </button>
         <button type="button" className="button" onClick={onCancel}>
