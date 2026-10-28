@@ -191,3 +191,41 @@ body {
 .button--danger:hover {
   background: #fdecea;
 }
+
+/* Weather-station popup */
+.weather-popup {
+  min-width: 200px;
+  font-size: 0.82rem;
+}
+
+.weather-popup strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.weather-popup table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.weather-popup td {
+  padding: 2px 4px;
+  vertical-align: top;
+}
+
+.weather-popup__label {
+  color: var(--muted);
+}
+
+.weather-popup__value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.weather-popup__source {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--panel-border);
+  color: var(--muted);
+  font-size: 0.72rem;
+}

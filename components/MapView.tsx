@@ -18,6 +18,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet-defaulticon-compatibility";
 import MarkerForm, { type MarkerDraft } from "./MarkerForm";
 import { OrthoPhotoLayer } from "./OrthoPhotoLayer";
+import WeatherStationsLayer from "./WeatherStationsLayer";
 import { getMarkerIcon } from "@/lib/icons";
 import { loadMarkers, saveMarkers } from "@/lib/storage";
 import {
@@ -176,6 +177,8 @@ export default function MapView() {
 
         <MapBehavior onZoom={setZoom} onClick={handleMapClick} />
         <FlyTo view={view} />
+
+        <WeatherStationsLayer />
 
         {markers.map((marker) => (
           <Marker key={marker.id} position={[marker.lat, marker.lng]} icon={getMarkerIcon(marker.icon)}>
