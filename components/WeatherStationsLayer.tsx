@@ -7,8 +7,8 @@ import type { WeatherReading } from "@/lib/weather";
 
 const ARROW_COLOR = "#0b6ea8";
 
-// Arrow points "up" (north) and is rotated clockwise by the meteorological
-// wind direction (the direction the wind is blowing FROM).
+// Arrow points "up" (north) and is rotated so it points in the direction the
+// wind is blowing TOWARD (meteorological direction + 180°).
 const ARROW_SVG = `
 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
   <circle cx="12" cy="19" r="2.6" fill="${ARROW_COLOR}"/>
@@ -33,7 +33,7 @@ function createWindIcon(station: WeatherReading): L.DivIcon {
   const arrow =
     station.windDir === null
       ? `<div class="wind-station__arrow wind-station__arrow--na">${NO_WIND_SVG}</div>`
-      : `<div class="wind-station__arrow" style="transform: rotate(${station.windDir}deg)">${ARROW_SVG}</div>`;
+      : `<div class="wind-station__arrow" style="transform: rotate(${station.windDir + 180}deg)">${ARROW_SVG}</div>`;
 
   const speed = formatValue(station.windSpeed);
   const temp = formatValue(station.waterTemp);
