@@ -39,6 +39,9 @@ const SEAMARK_ATTRIBUTION =
 const RADAR_WMS_URL = "https://ilmgs.envir.ee/geoserver/ilm/wms";
 const RADAR_ATTRIBUTION =
   '&copy; <a href="https://www.ilmateenistus.ee">Estonian Environment Agency</a>';
+const ENC_WMS_URL = "https://gis.transpordiamet.ee/primar/wms_ip/TranspordiametNutimeri";
+const ENC_ATTRIBUTION =
+  '&copy; <a href="https://transpordiamet.ee">Estonian Transport Administration</a> / <a href="https://services.ecc.no">PRIMAR</a>';
 
 type View = { lat: number; lng: number; zoom: number };
 
@@ -149,6 +152,17 @@ export default function MapView() {
               version="1.1.0"
               opacity={0.65}
               attribution={RADAR_ATTRIBUTION}
+            />
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Nautical charts (Transpordiamet)">
+            <WMSTileLayer
+              url={ENC_WMS_URL}
+              layers="cells"
+              styles="style-id-263"
+              format="image/png"
+              transparent
+              version="1.1.1"
+              attribution={ENC_ATTRIBUTION}
             />
           </LayersControl.Overlay>
         </LayersControl>
